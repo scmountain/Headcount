@@ -11,7 +11,7 @@ class DistrictRepository
   include FileImport
   include CleanData
 
-  attr_reader :name
+  attr_reader :name,:districts, :enrollment_repository
 
   def initialize
     @districts = {}

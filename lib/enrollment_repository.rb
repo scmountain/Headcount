@@ -69,6 +69,7 @@ class EnrollmentRepository
       contents = import_csv(hidden_files)
       contents.each do |row|
       name = row[:location]
+      #name = location(row)
       year = row[:timeframe].to_i
       data = row[:data].to_f.round(3)
       make_enrollment(name, year, data, key)

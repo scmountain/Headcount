@@ -79,6 +79,19 @@ class HeadcountAnalyst
     find_the_variance(numerator, denominator)
   end
 
+  def kindergarten_participation_correlates_with_high_school_graduation(name)
+    district_name = name[:for]
+    if district_name == "STATEWIDE"
+      statewide
+    else
+      percentage = kindergarten_participation_against_high_school_graduation(district_name)
+      if percentage > 0.6 && percentage < 1.5
+      end
+    end
+  end
 
-
+  def statewide
+    @district_repository.districts.keys.each { |e| e.kindergarten_participation_against_high_school_graduation
+      require "pry"; binding.pry}
+  end
 end

@@ -7,7 +7,6 @@ module CleanData
     input.upcase
   end
 
-
   def test_creates_three_decimals
     to_s[0..4].to_f
   end
