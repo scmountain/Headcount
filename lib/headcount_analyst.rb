@@ -45,4 +45,36 @@ class HeadcountAnalyst
     (numerator / denominator).round(3)
   end
 
+  def kindergarten_participation_against_high_school_graduation(name)
+    same_district_kindergarten_vs_highschool_maths(name)
+  end
+
+  def kindergarten_variation_district(name)
+    statewide_average_kindergarten
+    kindergarten_data = @district_repository.find_enrollment(name).kindergarten.values.reduce(:+)
+    variation = (kindergarten_data / statewide_average_kindergarten)
+  end
+
+  def high_school_variation_district(name)
+    statewide_average_high_school
+    high_school_data = @district_repository.find_enrollment(name).high_school_graduation.values.reduce(:+)
+    variation_hs = (high_school_data / statewide_average_high_school)
+  end
+
+  def statewide_average_high_school
+    state_highschool_data = @district_repository.find_enrollment("Colorado").high_school_graduation
+    state_highschool_data_maths = (state_highschool_data.values.reduce(:+) / state_highschool_data.count.to_f)
+  end
+
+  def statewide_average_kindergarten
+    state_kindergarten_data = @district_repository.find_enrollment("Colorado").kindergarten
+    kindergarten_data_maths = ( state_kindergarten_data.values.reduce(:+) / state_kindergarten_data.count )
+  end
+
+  def same_district_kindergarten_vs_highschool_maths(name)
+    variation_totes = high_school_variation_district(name) / kindergarten_variation_district(name)
+  end
+
+
+
 end

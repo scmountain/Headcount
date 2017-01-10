@@ -26,6 +26,7 @@ class Enrollment
 
   def graduation_rate_by_year
     @high_school_graduation
+    require "pry"; binding.pry
   end
 
   def graduation_rate_in_year(year)

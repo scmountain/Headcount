@@ -7,36 +7,31 @@ require_relative "../../headcount-master/lib/enrollment_repository"
 class EnrollmentRepositoryTest < MiniTest::Test
 
   def test_variable_creation
-    skip
     er = EnrollmentRepository.new
     assert_equal er.csv_data_clustered, {}
   end
 
   def test_load_data_has_nested_files
-    skip
     er = EnrollmentRepository.new
     csv_file = {:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}}
     assert_equal Hash, er.load_data(csv_file).class
   end
 
   def test_make_enrollment
-    skip
     er = EnrollmentRepository.new
-    enrollment = er.make_enrollment("Turing" , 2007, 0.34)
+    enrollment = er.make_enrollment("Turing" , 2007, 0.34, :kindergarten)
     assert_equal "Turing", enrollment.name
     assert_equal [2007], enrollment.kindergarten.keys
     assert_equal [0.34], enrollment.kindergarten.values
   end
 
   def test_enrollment_formatting
-    skip
     er = EnrollmentRepository.new
-    enrollment = er.make_enrollment("Turing" , 2007, 0.34)
+    enrollment = er.make_enrollment("Turing" , 2007, 0.34, :kindergarten)
     assert_equal Hash, enrollment.kindergarten.class
   end
 
   def test_load_data_has_nested_files
-    skip
     er = EnrollmentRepository.new
     csv_file = {:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}}
     enrollment = er.load_data(csv_file)
@@ -45,8 +40,14 @@ class EnrollmentRepositoryTest < MiniTest::Test
   end
 
   def test_find_by_name
-    skip
     er = EnrollmentRepository.new
+    er.load_data({
+               :enrollment => {
+                 :kindergarten => "./data/Kindergartners in full-day program.csv",
+                 :high_school_graduation => "./data/High school graduation rates.csv"
+               }
+             })
+
     er.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
     name = "WELD COUNTY RE-1"
     enrollment = er.find_by_name(name)
@@ -55,13 +56,13 @@ class EnrollmentRepositoryTest < MiniTest::Test
 
 
   def test_loading_and_finding_enrollments
-    skip
     er = EnrollmentRepository.new
     er.load_data({
-                   :enrollment => {
-                     :kindergarten => "./data/Kindergartners in full-day program.csv"
-                   }
-                 })
+               :enrollment => {
+                 :kindergarten => "./data/Kindergartners in full-day program.csv",
+                 :high_school_graduation => "./data/High school graduation rates.csv"
+               }
+             })
 
     name = "GUNNISON WATERSHED RE1J"
     enrollment = er.find_by_name(name)

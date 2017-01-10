@@ -75,7 +75,6 @@ class EnrollmentRepository
     end
   end
     @csv_data_clustered
-    require "pry"; binding.pry
   end
 
   def make_enrollment(name, year, data, key)
