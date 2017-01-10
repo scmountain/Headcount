@@ -51,14 +51,16 @@ class HeadcountAnalyst
 
   def kindergarten_variation_district(name)
     statewide_average_kindergarten
-    kindergarten_data = @district_repository.find_enrollment(name).kindergarten.values.reduce(:+)
+    kindergarten_data = (@district_repository.find_enrollment(name).kindergarten.values.reduce(:+) / @district_repository.find_enrollment(name).kindergarten.count)
     variation = (kindergarten_data / statewide_average_kindergarten)
   end
 
   def high_school_variation_district(name)
-    statewide_average_high_school
-    high_school_data = @district_repository.find_enrollment(name).high_school_graduation.values.reduce(:+)
-    variation_hs = (high_school_data / statewide_average_high_school)
+    denominator = @district_repository.find_enrollment(name).high_school_graduation.count
+    numerator = @district_repository.find_enrollment(name).high_school_graduation.values.reduce(:+)
+    numerator2 = find_the_variance(numerator, denominator)
+    denominator2 = statewide_average_high_school
+    find_the_variance(numerator2, denominator2)
   end
 
   def statewide_average_high_school
@@ -72,7 +74,9 @@ class HeadcountAnalyst
   end
 
   def same_district_kindergarten_vs_highschool_maths(name)
-    variation_totes = high_school_variation_district(name) / kindergarten_variation_district(name)
+    numerator = kindergarten_variation_district(name)
+    denominator = high_school_variation_district(name)
+    find_the_variance(numerator, denominator)
   end
 
 

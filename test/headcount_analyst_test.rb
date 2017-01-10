@@ -83,12 +83,11 @@ class HeadcountAnalystTest < MiniTest::Test
       :high_school_graduation => "./data/High school graduation rates.csv"}})
       ha = HeadcountAnalyst.new(dr)
 
-      assert_equal 0.548, ha.kindergarten_participation_against_high_school_graduation('MONTROSE COUNTY RE-1J'), 0.005
+      assert_in_delta 0.548, ha.kindergarten_participation_against_high_school_graduation('MONTROSE COUNTY RE-1J'), 0.005
       assert_in_delta 0.800, ha.kindergarten_participation_against_high_school_graduation('STEAMBOAT SPRINGS RE-2'), 0.005
     end
 
     def test_does_kindergarten_participation_predict_hs_graduation
-      skip
       dr = DistrictRepository.new
       dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
         :high_school_graduation => "./data/High school graduation rates.csv"}})
@@ -100,24 +99,23 @@ class HeadcountAnalystTest < MiniTest::Test
         assert ha.kindergarten_participation_correlates_with_high_school_graduation(for: 'PARK (ESTES PARK) R-3')
       end
 
-      def test_statewide_kindergarten_high_school_prediction
-        skip
-        dr = DistrictRepository.new
-        dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
-          :high_school_graduation => "./data/High school graduation rates.csv"}})
-          ha = HeadcountAnalyst.new(dr)
+    def test_statewide_kindergarten_high_school_prediction
+      dr = DistrictRepository.new
+      dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
+        :high_school_graduation => "./data/High school graduation rates.csv"}})
+        ha = HeadcountAnalyst.new(dr)
 
-          refute ha.kindergarten_participation_correlates_with_high_school_graduation(:for => 'STATEWIDE')
-        end
+        refute ha.kindergarten_participation_correlates_with_high_school_graduation(:for => 'STATEWIDE')
+    end
 
-        def test_kindergarten_hs_prediction_multi_district
-          skip
-          dr = DistrictRepository.new
-          dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
-            :high_school_graduation => "./data/High school graduation rates.csv"}})
-            ha = HeadcountAnalyst.new(dr)
-            districts = ["ACADEMY 20", 'PARK (ESTES PARK) R-3', 'YUMA SCHOOL DISTRICT 1']
-            assert ha.kindergarten_participation_correlates_with_high_school_graduation(:across => districts)
-          end
+    def test_kindergarten_hs_prediction_multi_district
+      skip
+      dr = DistrictRepository.new
+      dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
+        :high_school_graduation => "./data/High school graduation rates.csv"}})
+        ha = HeadcountAnalyst.new(dr)
+        districts = ["ACADEMY 20", 'PARK (ESTES PARK) R-3', 'YUMA SCHOOL DISTRICT 1']
+        assert ha.kindergarten_participation_correlates_with_high_school_graduation(:across => districts)
+    end
 
 end
