@@ -86,27 +86,26 @@ class HeadcountAnalyst
     if name.keys ==[:across]
       name[:across].each do |district_name|
         percentage = kindergarten_participation_against_high_school_graduation(district_name)
-        if percentage > 0.6 && percentage < 1.5
-          @multiple_districts_averages << percentage
-        end
+        return false if percentage < 0.6 || percentage > 1.5
       end
-      if @multiple_districts_averages.empty?
-        false
-      else
-        true
-      end
-    end
-    district_name = name[:for]
-    if district_name == "STATEWIDE"
-      statewide > 0.6 && percentage < 1.5
-    else
-      percentage = kindergarten_participation_against_high_school_graduation(district_name)
-      if percentage > 0.6 && percentage < 1.5
+      true
+    elsif name.keys == [:for]
+      if name[:for] == "STATEWIDE"
+        statewide > 0.7
       end
     end
   end
 
   def statewide
+    within_bounds = 0.0
+    valid_districts_count = 0.0
+    #if district vald AND is within bounds
+      within_bounds += 1
+      valid_districts += 1
+    # else if district is valid, but not within bounds
+      valid_districts += 1
+
+    average within_bounds = within_bounds / valid_districts
     above_average = []
     below_average = []
     each_districts_average = @district_repository.districts.keys.map do |district_name|
