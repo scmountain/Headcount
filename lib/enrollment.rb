@@ -11,7 +11,7 @@ class Enrollment
   attr_accessor :kindergarten, :name, :year, :high_school_graduation
 
   def initialize(input)
-    @name = input[:name]
+    @name = input[:name].upcase
     @kindergarten = input[:kindergarten] #dont refactor grades yet
     @high_school_graduation = input[:high_school_graduation]
   end

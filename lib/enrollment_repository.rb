@@ -68,8 +68,7 @@ class EnrollmentRepository
       hidden_files = file[:enrollment][key]
       contents = import_csv(hidden_files)
       contents.each do |row|
-      name = row[:location]
-      #name = location(row)
+      name = row[:location].upcase
       year = row[:timeframe].to_i
       data = row[:data].to_f.round(3)
       make_enrollment(name, year, data, key)
@@ -92,6 +91,7 @@ class EnrollmentRepository
   end
 
   def find_by_name(name)
+    name.upcase
     @csv_data_clustered[name]
   end
 end

@@ -6,10 +6,12 @@ require_relative "../../headcount-master/lib/file_import"
 require_relative "../../headcount-master/lib/clean_data"
 
 class HeadcountAnalyst
-  attr_accessor :district_1, :district_2, :district_repository
+  attr_accessor :district_1, :district_2, :district_repository, :statewide_answer
 
   def initialize(district_repository)
     @district_repository = district_repository
+    @state_name = "COLORADO"
+    @statewide_answer
   end
 
   def kindergarten_participation_rate_variation(district_1, district_2)
@@ -64,12 +66,12 @@ class HeadcountAnalyst
   end
 
   def statewide_average_high_school
-    state_highschool_data = @district_repository.find_enrollment("Colorado").high_school_graduation
+    state_highschool_data = @district_repository.find_enrollment(@state_name).high_school_graduation
     state_highschool_data_maths = (state_highschool_data.values.reduce(:+) / state_highschool_data.count.to_f)
   end
 
   def statewide_average_kindergarten
-    state_kindergarten_data = @district_repository.find_enrollment("Colorado").kindergarten
+    state_kindergarten_data = @district_repository.find_enrollment(@state_name).kindergarten
     kindergarten_data_maths = ( state_kindergarten_data.values.reduce(:+) / state_kindergarten_data.count )
   end
 
@@ -82,7 +84,7 @@ class HeadcountAnalyst
   def kindergarten_participation_correlates_with_high_school_graduation(name)
     district_name = name[:for]
     if district_name == "STATEWIDE"
-      statewide
+      statewide  > 0.6 && percentage < 1.5
     else
       percentage = kindergarten_participation_against_high_school_graduation(district_name)
       if percentage > 0.6 && percentage < 1.5
@@ -91,7 +93,22 @@ class HeadcountAnalyst
   end
 
   def statewide
-    @district_repository.districts.keys.each { |e| e.kindergarten_participation_against_high_school_graduation
-      require "pry"; binding.pry}
+    above_average = []
+    below_average = []
+    each_districts_average = @district_repository.districts.keys.map do |district_name|
+      percentage = kindergarten_participation_against_high_school_graduation(district_name)
+      if percentage > 0.6 && percentage < 1.5
+        above_average << percentage
+        above_average.count
+      else
+        below_average << percentage
+        below_average.reject! &:nan?
+        below_average.count
+      end
+    end
+    numerator = above_average.count.to_f
+    denominator = each_districts_average.count.to_f
+    @statewide_answer = find_the_variance(numerator, denominator)
   end
+
 end
