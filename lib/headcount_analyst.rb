@@ -54,7 +54,8 @@ class HeadcountAnalyst
 
   def kindergarten_variation_district(name)
     statewide_average_kindergarten
-    kindergarten_data = (@district_repository.find_enrollment(name).kindergarten.values.reduce(:+) / @district_repository.find_enrollment(name).kindergarten.count)
+    shorten = @district_repository.find_enrollment(name).kindergarten.values
+    kindergarten_data = (shorten.reduce(:+) / shorten.count)
     variation = (kindergarten_data / statewide_average_kindergarten)
   end
 
@@ -89,23 +90,32 @@ class HeadcountAnalyst
         return false if percentage < 0.6 || percentage > 1.5
       end
       true
-    elsif name.keys == [:for]
-      if name[:for] == "STATEWIDE"
-        statewide > 0.7
-      end
+    else
+      statewide_data_window(name)
+    end
+  end
+
+  def statewide_data_window(name)
+    if name[:for] != "STATEWIDE"
+      district_name = name[:for]
+      percentage = kindergarten_participation_against_high_school_graduation(district_name)
+      return false if percentage < 0.6 || percentage > 1.5
+      true
+    else
+      statewide > 0.7
     end
   end
 
   def statewide
-    within_bounds = 0.0
-    valid_districts_count = 0.0
-    #if district vald AND is within bounds
-      within_bounds += 1
-      valid_districts += 1
-    # else if district is valid, but not within bounds
-      valid_districts += 1
+    # within_bounds = 0.0
+    # valid_districts_count = 0.0
+    # #if district vald AND is within bounds
+    #   within_bounds += 1
+    #   valid_districts += 1
+    # # else if district is valid, but not within bounds
+    #   valid_districts += 1
+    # average within_bounds = within_bounds / valid_districts
 
-    average within_bounds = within_bounds / valid_districts
     above_average = []
     below_average = []
     each_districts_average = @district_repository.districts.keys.map do |district_name|
