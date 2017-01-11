@@ -91,7 +91,6 @@ class EnrollmentRepository
   end
 
   def find_by_name(name)
-    name.upcase
     @csv_data_clustered[name]
   end
 end

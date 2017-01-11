@@ -6,12 +6,13 @@ require_relative "../../headcount-master/lib/file_import"
 require_relative "../../headcount-master/lib/clean_data"
 
 class HeadcountAnalyst
-  attr_accessor :district_1, :district_2, :district_repository, :statewide_answer
+  attr_accessor :district_1, :district_2, :district_repository, :statewide_answer, :makimultiple_districts_averages
 
   def initialize(district_repository)
     @district_repository = district_repository
     @state_name = "COLORADO"
     @statewide_answer
+    @multiple_districts_averages = []
   end
 
   def kindergarten_participation_rate_variation(district_1, district_2)
@@ -82,9 +83,22 @@ class HeadcountAnalyst
   end
 
   def kindergarten_participation_correlates_with_high_school_graduation(name)
+    if name.keys ==[:across]
+      name[:across].each do |district_name|
+        percentage = kindergarten_participation_against_high_school_graduation(district_name)
+        if percentage > 0.6 && percentage < 1.5
+          @multiple_districts_averages << percentage
+        end
+      end
+      if @multiple_districts_averages.empty?
+        false
+      else
+        true
+      end
+    end
     district_name = name[:for]
     if district_name == "STATEWIDE"
-      statewide  > 0.6 && percentage < 1.5
+      statewide > 0.6 && percentage < 1.5
     else
       percentage = kindergarten_participation_against_high_school_graduation(district_name)
       if percentage > 0.6 && percentage < 1.5
@@ -110,5 +124,4 @@ class HeadcountAnalyst
     denominator = each_districts_average.count.to_f
     @statewide_answer = find_the_variance(numerator, denominator)
   end
-
 end

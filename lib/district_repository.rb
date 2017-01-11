@@ -48,7 +48,7 @@ class DistrictRepository
 
   def assign_enrollments
     @enrollment_repository.csv_data_clustered.each do |key, value|
-      district = find_by_name(key.upcase)
+      district = find_by_name(key)
       district.enrollment = value
     end
   end
