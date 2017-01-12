@@ -18,15 +18,15 @@ class HeadcountAnalyst
     @multiple_districts_averages = []
   end
 
-  def kindergarten_participation_rate_variation(district_1, district_2)
-    get_district_data(district_1, district_2)
+  def kindergarten_participation_rate_variation(d_1, d_2)
+    get_district_data(d_1, d_2)
     dist_1_avg = find_the_average(@district_1.values)
     dist_2_avg = find_the_average(@district_2.values)
     find_the_variance(dist_1_avg,dist_2_avg)
   end
 
-  def kindergarten_participation_rate_variation_trend(district_1, district_2)
-    get_district_data(district_1, district_2)
+  def kindergarten_participation_rate_variation_trend(d_1, d_2)
+    get_district_data(d_1, d_2)
     year_hash = {}
     years = @district_1.keys
     years.each do |year|
@@ -38,11 +38,11 @@ class HeadcountAnalyst
     year_hash
   end
 
-  def get_district_data(district_1, district_2)
-    dist_object_1 = @district_repository.find_enrollment(district_1)
-    dist_object_2 = @district_repository.find_enrollment(district_2[:against])
-    @district_1 = dist_object_1.kindergarten
-    @district_2 = dist_object_2.kindergarten
+  def get_district_data(d_1, d_2)
+    dist_object_1 = @district_repository.find_enrollment(d_1)
+    dist_object_2 = @district_repository.find_enrollment(d_2[:against])
+    @district_1 = dist_object_1.kindergarten_participation
+    @district_2 = dist_object_2.kindergarten_participation
   end
 
   def find_the_average(district_values)
@@ -59,7 +59,8 @@ class HeadcountAnalyst
 
   def kindergarten_variation_district(name)
     statewide_average_kindergarten
-    year_avg = @district_repository.find_enrollment(name).kindergarten.values
+    year_avg = @district_repository.find_enrollment(name)
+    .kindergarten_participation.values
     kindergarten_data = (year_avg.reduce(:+) / year_avg.count)
     variation = (kindergarten_data / statewide_average_kindergarten)
   end
@@ -80,7 +81,8 @@ class HeadcountAnalyst
   end
 
   def statewide_average_kindergarten
-    co_kg_data = @district_repository.find_enrollment(@state_name).kindergarten
+    co_kg_data = @district_repository.find_enrollment(@state_name)
+    .kindergarten_participation
     kindergarten_data_maths = (co_kg_data.values.reduce(:+) / co_kg_data.count)
   end
 
@@ -104,8 +106,8 @@ class HeadcountAnalyst
 
   def statewide_data_window(name)
     if name[:for] != "STATEWIDE"
-      district_name = name[:for]
-      percentage = kindergarten_participation_against_high_school_graduation(district_name)
+      dn = name[:for]
+      percentage = kindergarten_participation_against_high_school_graduation(dn)
       return false if percentage < 0.6 || percentage > 1.5
       true
     else
@@ -114,19 +116,10 @@ class HeadcountAnalyst
   end
 
   def statewide
-    # within_bounds = 0.0
-    # valid_districts_count = 0.0
-    # #if district vald AND is within bounds
-    #   within_bounds += 1
-    #   valid_districts += 1
-    # # else if district is valid, but not within bounds
-    #   valid_districts += 1
-    # average within_bounds = within_bounds / valid_districts
-
     above_average = []
     below_average = []
-    each_districts_average = @district_repository.districts.keys.map do |district_name|
-      percentage = kindergarten_participation_against_high_school_graduation(district_name)
+    e = @district_repository.districts.keys.map do |dn|
+      percentage = kindergarten_participation_against_high_school_graduation(dn)
       if percentage > 0.6 && percentage < 1.5
         above_average << percentage
         above_average.count
@@ -137,7 +130,7 @@ class HeadcountAnalyst
       end
     end
     numerator = above_average.count.to_f
-    denominator = each_districts_average.count.to_f
+    denominator = e.count.to_f
     statewide_answer = find_the_variance(numerator, denominator)
   end
 end

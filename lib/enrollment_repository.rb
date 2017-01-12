@@ -33,11 +33,13 @@ class EnrollmentRepository
   end
 
   def make_enrollment(name, year, data, key)
-    if key == :kindergarten
+    if key == :kindergarten_participation
       if @csv_data_clustered.has_key?(name)
-        @csv_data_clustered[name].kindergarten[year] = data
+        @csv_data_clustered[name].kindergarten_participation[year] = data
       else
-        e = Enrollment.new({:name => name, :kindergarten => {year => data}, :high_school_graduation => {}})
+        e = Enrollment.new({:name => name,
+                            :kindergarten_participation => {year => data},
+                            :high_school_graduation => {}})
         @csv_data_clustered[name] = e
       end
     else

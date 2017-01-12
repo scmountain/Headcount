@@ -8,17 +8,18 @@ class IterationZeroTest < Minitest::Test
 
   def test_variables
     e = Enrollment.new({:name => "ACADEMY 20", :kindergarten_participation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
+    # require "pry"; binding.pry
     assert_equal "ACADEMY 20", e.name
-    assert_equal ({2010=>0.3915}), e.kindergarten
+    assert_equal ({2010=>0.3915, 2011=>0.35356, 2012=>0.2677}), e.kindergarten_participation
   end
 
   def test_kindergarten_participation_by_a_year
-      e = Enrollment.new({:name => "ACADEMY 20", :kindergarten_participation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
+    e = Enrollment.new({:name => "ACADEMY 20", :kindergarten_participation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
     assert_equal ({2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}), e.kindergarten_participation_by_year
   end
 
   def test_kindergarten_participation_in_a_year
-      e = Enrollment.new({:name => "ACADEMY 20", :kindergarten_participation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
+    e = Enrollment.new({:name => "ACADEMY 20", :kindergarten_participation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
     assert_equal 0.3915, e.kindergarten_participation_in_year(2010)
   end
 
@@ -39,7 +40,7 @@ class IterationZeroTest < Minitest::Test
     er = EnrollmentRepository.new
     er.load_data({
                    :enrollment => {
-                     :kindergarten => "./data/Kindergartners in full-day program.csv"
+                     :kindergarten_participation => "./data/Kindergartners in full-day program.csv"
                    }
                  })
 

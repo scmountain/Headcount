@@ -13,27 +13,27 @@ class EnrollmentRepositoryTest < MiniTest::Test
 
   def test_load_data_has_nested_files
     er = EnrollmentRepository.new
-    csv_file = {:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}}
+    csv_file = {:enrollment => {:kindergarten_participation => "./data/Kindergartners in full-day program.csv"}}
     assert_equal Hash, er.load_data(csv_file).class
   end
 
   def test_make_enrollment
     er = EnrollmentRepository.new
-    enrollment = er.make_enrollment("Turing" , 2007, 0.34, :kindergarten)
-    assert_equal "Turing", enrollment.name
-    assert_equal [2007], enrollment.kindergarten.keys
-    assert_equal [0.34], enrollment.kindergarten.values
+    enrollment = er.make_enrollment("Turing" , 2007, 0.34, :kindergarten_participation)
+    assert_equal "TURING", enrollment.name
+    assert_equal [2007], enrollment.kindergarten_participation.keys
+    assert_equal [0.34], enrollment.kindergarten_participation.values
   end
 
   def test_enrollment_formatting
     er = EnrollmentRepository.new
-    enrollment = er.make_enrollment("Turing" , 2007, 0.34, :kindergarten)
-    assert_equal Hash, enrollment.kindergarten.class
+    enrollment = er.make_enrollment("Turing" , 2007, 0.34, :kindergarten_participation)
+    assert_equal Hash, enrollment.kindergarten_participation.class
   end
 
   def test_load_data_has_nested_files
     er = EnrollmentRepository.new
-    csv_file = {:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}}
+    csv_file = {:enrollment => {:kindergarten_participation => "./data/Kindergartners in full-day program.csv"}}
     enrollment = er.load_data(csv_file)
     assert_instance_of Hash, er.load_data(csv_file)
     refute_empty enrollment
@@ -43,23 +43,21 @@ class EnrollmentRepositoryTest < MiniTest::Test
     er = EnrollmentRepository.new
     er.load_data({
                :enrollment => {
-                 :kindergarten => "./data/Kindergartners in full-day program.csv",
+                 :kindergarten_participation => "./data/Kindergartners in full-day program.csv",
                  :high_school_graduation => "./data/High school graduation rates.csv"
                }
              })
-
-    er.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
+    er.load_data({:enrollment => {:kindergarten_participation => "./data/Kindergartners in full-day program.csv"}})
     name = "WELD COUNTY RE-1"
     enrollment = er.find_by_name(name)
     assert_equal name, enrollment.name
   end
 
-
   def test_loading_and_finding_enrollments
     er = EnrollmentRepository.new
     er.load_data({
                :enrollment => {
-                 :kindergarten => "./data/Kindergartners in full-day program.csv",
+                 :kindergarten_participation => "./data/Kindergartners in full-day program.csv",
                  :high_school_graduation => "./data/High school graduation rates.csv"
                }
              })
@@ -71,12 +69,11 @@ class EnrollmentRepositoryTest < MiniTest::Test
     assert_in_delta 0.144, enrollment.kindergarten_participation_in_year(2004), 0.005
   end
 
-  #########ITERATION 2###############
   def test_enrollment_repository_with_high_school_data
     er = EnrollmentRepository.new
     er.load_data({
                :enrollment => {
-                 :kindergarten => "./data/Kindergartners in full-day program.csv",
+                 :kindergarten_participation => "./data/Kindergartners in full-day program.csv",
                  :high_school_graduation => "./data/High school graduation rates.csv"
                }
              })

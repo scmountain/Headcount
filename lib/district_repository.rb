@@ -19,7 +19,7 @@ class DistrictRepository
   end
 
   def load_data(file)
-    hidden_file = file[:enrollment][:kindergarten]
+    hidden_file = file[:enrollment][:kindergarten_participation]
     contents = import_csv(hidden_file)
     contents.each do |row|
       district_name = clean_data(row[:location])
