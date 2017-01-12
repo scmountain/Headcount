@@ -6,12 +6,15 @@ require_relative "../../headcount-master/lib/file_import"
 require_relative "../../headcount-master/lib/clean_data"
 
 class HeadcountAnalyst
-  attr_accessor :district_1, :district_2, :district_repository, :statewide_answer, :makimultiple_districts_averages
+  attr_accessor :district_1,
+                :district_2,
+                :district_repository,
+                :multiple_districts_averages,
+                :state_name
 
   def initialize(district_repository)
     @district_repository = district_repository
     @state_name = "COLORADO"
-    @statewide_answer
     @multiple_districts_averages = []
   end
 
@@ -36,8 +39,10 @@ class HeadcountAnalyst
   end
 
   def get_district_data(district_1, district_2)
-    @district_1 = @district_repository.find_enrollment(district_1).kindergarten
-    @district_2 = @district_repository.find_enrollment(district_2[:against]).kindergarten
+    dist_object_1 = @district_repository.find_enrollment(district_1)
+    dist_object_2 = @district_repository.find_enrollment(district_2[:against])
+    @district_1 = dist_object_1.kindergarten
+    @district_2 = dist_object_2.kindergarten
   end
 
   def find_the_average(district_values)
@@ -54,27 +59,29 @@ class HeadcountAnalyst
 
   def kindergarten_variation_district(name)
     statewide_average_kindergarten
-    shorten = @district_repository.find_enrollment(name).kindergarten.values
-    kindergarten_data = (shorten.reduce(:+) / shorten.count)
+    year_avg = @district_repository.find_enrollment(name).kindergarten.values
+    kindergarten_data = (year_avg.reduce(:+) / year_avg.count)
     variation = (kindergarten_data / statewide_average_kindergarten)
   end
 
   def high_school_variation_district(name)
-    denominator = @district_repository.find_enrollment(name).high_school_graduation.count
-    numerator = @district_repository.find_enrollment(name).high_school_graduation.values.reduce(:+)
+    year_avg = @district_repository.find_enrollment(name).high_school_graduation
+    denominator = year_avg.count
+    numerator = year_avg.values.reduce(:+)
     numerator2 = find_the_variance(numerator, denominator)
     denominator2 = statewide_average_high_school
     find_the_variance(numerator2, denominator2)
   end
 
   def statewide_average_high_school
-    state_highschool_data = @district_repository.find_enrollment(@state_name).high_school_graduation
-    state_highschool_data_maths = (state_highschool_data.values.reduce(:+) / state_highschool_data.count.to_f)
+    enrollment_data = @district_repository.find_enrollment(@state_name)
+    co_hs_data = enrollment_data.high_school_graduation
+    state_hs_data_maths = (co_hs_data.values.reduce(:+) / co_hs_data.count.to_f)
   end
 
   def statewide_average_kindergarten
-    state_kindergarten_data = @district_repository.find_enrollment(@state_name).kindergarten
-    kindergarten_data_maths = ( state_kindergarten_data.values.reduce(:+) / state_kindergarten_data.count )
+    co_kg_data = @district_repository.find_enrollment(@state_name).kindergarten
+    kindergarten_data_maths = (co_kg_data.values.reduce(:+) / co_kg_data.count)
   end
 
   def same_district_kindergarten_vs_highschool_maths(name)
@@ -131,6 +138,6 @@ class HeadcountAnalyst
     end
     numerator = above_average.count.to_f
     denominator = each_districts_average.count.to_f
-    @statewide_answer = find_the_variance(numerator, denominator)
+    statewide_answer = find_the_variance(numerator, denominator)
   end
 end

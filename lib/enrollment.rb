@@ -12,7 +12,7 @@ class Enrollment
 
   def initialize(input)
     @name = input[:name].upcase
-    @kindergarten = input[:kindergarten] #dont refactor grades yet
+    @kindergarten = input[:kindergarten_participation]
     @high_school_graduation = input[:high_school_graduation]
   end
 
@@ -26,7 +26,6 @@ class Enrollment
 
   def graduation_rate_by_year
     @high_school_graduation
-    require "pry"; binding.pry
   end
 
   def graduation_rate_in_year(year)
@@ -34,5 +33,3 @@ class Enrollment
   end
 
 end
-
-#think of .send instead of long if/else for grade data

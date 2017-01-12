@@ -7,10 +7,12 @@ require_relative "../../headcount-master/lib/headcount_analyst"
 
 
 class HeadcountAnalystTest < MiniTest::Test
-  
+
   def test_variables
     ha = HeadcountAnalyst.new("jaeger")
     assert_equal "jaeger", ha.district_repository
+    assert_equal "COLORADO", ha.state_name
+    assert_instance_of Array, ha.multiple_districts_averages
   end
 
   def test_enrollment_analysis_basics
@@ -93,13 +95,12 @@ class HeadcountAnalystTest < MiniTest::Test
       refute ha.kindergarten_participation_correlates_with_high_school_graduation(:for => 'STATEWIDE')
   end
 
-  # def test_kindergarten_hs_prediction_multi_district
-  #   dr = DistrictRepository.new
-  #   dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
-  #     :high_school_graduation => "./data/High school graduation rates.csv"}})
-  #     ha = HeadcountAnalyst.new(dr)
-  #     districts = ["ACADEMY 20", 'PARK (ESTES PARK) R-3', 'YUMA SCHOOL DISTRICT 1']
-  #     assert ha.kindergarten_participation_correlates_with_high_school_graduation(:across => districts)
-  # end
-
+  def test_kindergarten_hs_prediction_multi_district
+    dr = DistrictRepository.new
+    dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
+      :high_school_graduation => "./data/High school graduation rates.csv"}})
+      ha = HeadcountAnalyst.new(dr)
+      districts = ["ACADEMY 20", 'PARK (ESTES PARK) R-3', 'YUMA SCHOOL DISTRICT 1']
+      assert ha.kindergarten_participation_correlates_with_high_school_graduation(:across => districts)
+  end
 end
