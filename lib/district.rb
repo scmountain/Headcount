@@ -1,8 +1,8 @@
 require "csv"
 
-require_relative "../../headcount-master/lib/district_repository"
-require_relative "../../headcount-master/lib/enrollment"
-require_relative "../../headcount-master/lib/enrollment_repository"
+require_relative "district_repository"
+require_relative "enrollment"
+require_relative "enrollment_repository"
 
 class District
   attr_reader :school_info
@@ -11,6 +11,11 @@ class District
   def initialize(school_info)
     @school_info = school_info
     @enrollment = nil
+    @statewide_test
+  end
+
+  def statewide_test
+    StatewideTest.new
   end
 
   def name

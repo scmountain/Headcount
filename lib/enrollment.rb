@@ -1,10 +1,10 @@
 
 require "csv"
 
-require_relative "../../headcount-master/lib/district_repository"
-require_relative "../../headcount-master/lib/district"
-require_relative "../../headcount-master/lib/enrollment"
-require_relative "../../headcount-master/lib/enrollment_repository"
+require_relative "district_repository"
+require_relative "district"
+require_relative "enrollment"
+require_relative "enrollment_repository"
 
 class Enrollment
 

@@ -1,8 +1,8 @@
-require_relative "../../headcount-master/lib/district"
-require_relative "../../headcount-master/lib/enrollment"
-require_relative "../../headcount-master/lib/enrollment_repository"
-require_relative "../../headcount-master/lib/file_import"
-require_relative "../../headcount-master/lib/clean_data"
+require_relative "district"
+require_relative "enrollment"
+require_relative "enrollment_repository"
+require_relative "file_import"
+require_relative "clean_data"
 
 require 'csv'
 
@@ -19,7 +19,7 @@ class DistrictRepository
   end
 
   def load_data(file)
-    hidden_file = file[:enrollment][:kindergarten_participation]
+    hidden_file = file[:enrollment][:kindergarten]
     contents = import_csv(hidden_file)
     contents.each do |row|
       district_name = clean_data(row[:location])
