@@ -11,7 +11,7 @@ class DistrictRepository
   include FileImport
   include CleanData
 
-  attr_reader :name
+  attr_reader :name,:districts, :enrollment_repository
 
   def initialize
     @districts = {}
@@ -19,7 +19,7 @@ class DistrictRepository
   end
 
   def load_data(file)
-    hidden_file = file[:enrollment][:kindergarten]
+    hidden_file = file[:enrollment][:kindergarten_participation]
     contents = import_csv(hidden_file)
     contents.each do |row|
       district_name = clean_data(row[:location])
@@ -48,7 +48,7 @@ class DistrictRepository
 
   def assign_enrollments
     @enrollment_repository.csv_data_clustered.each do |key, value|
-      district = find_by_name(key.upcase)
+      district = find_by_name(key)
       district.enrollment = value
     end
   end

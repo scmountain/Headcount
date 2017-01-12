@@ -9,7 +9,7 @@ class TestDistrictRepository < MiniTest::Test
     dr = DistrictRepository.new
     dr.load_data({
                    :enrollment => {
-                     :kindergarten => "./data/Kindergartners in full-day program.csv"
+                     :kindergarten_participation => "./data/Kindergartners in full-day program.csv"
                    }
                  })
     district = dr.find_by_name("ACADEMY 20")
@@ -21,7 +21,7 @@ class TestDistrictRepository < MiniTest::Test
 
   def test_district_enrollment_relationship_basics
     dr = DistrictRepository.new
-    dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
+    dr.load_data({:enrollment => {:kindergarten_participation => "./data/Kindergartners in full-day program.csv"}})
     district = dr.find_by_name("GUNNISON WATERSHED RE1J")
     assert_in_delta 0.144, district.enrollment.kindergarten_participation_in_year(2004), 0.005
   end
@@ -30,7 +30,7 @@ class TestDistrictRepository < MiniTest::Test
     dr = DistrictRepository.new
     dr.load_data({
                    :enrollment => {
-                     :kindergarten => "./data/Kindergartners in full-day program.csv"
+                     :kindergarten_participation => "./data/Kindergartners in full-day program.csv"
                    }
                  })
     district = dr.find_by_name("ACADEMY 20")
