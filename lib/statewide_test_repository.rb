@@ -51,14 +51,14 @@ class StatewideTestRepository
 
     statewide_test = @statewide_tests[name]
     if top_level_key == 3 || top_level_key == 8
-      top_level_key_year_subject_hash = statewide_test.grade_year_subject
+      tlk = statewide_test.grade_year_subject
     else
-      top_level_key_year_subject_hash = statewide_test.race_year_subject
+      tlk = statewide_test.race_year_subject
     end
 
-    top_level_key_year_subject_hash[top_level_key] = {} unless top_level_key_year_subject_hash.has_key?(top_level_key)
-    top_level_key_year_subject_hash[top_level_key][year] = {} unless top_level_key_year_subject_hash[top_level_key].has_key?(year)
-    top_level_key_year_subject_hash[top_level_key][year][subject] = data
+    tlk[top_level_key] = {} unless tlk.has_key?(top_level_key)
+    tlk[top_level_key][year] = {} unless tlk[top_level_key].has_key?(year)
+    tlk[top_level_key][year][subject] = data
   end
 
   def find_by_name(name)

@@ -3,8 +3,10 @@ class StatewideTest
 
   def initialize(input = {})
     @name = input[:name]
-    @grade_year_subject = input[:grade_year_subject] if input.has_key?(:grade_year_subject)
-    @race_year_subject = input[:race_year_subject] if input.has_key?(:race_year_subject)
+    @grade_year_subject = input[:grade_year_subject] if input
+    .has_key?(:grade_year_subject)
+    @race_year_subject = input[:race_year_subject] if input
+    .has_key?(:race_year_subject)
   end
 
   def proficient_by_grade(grade)

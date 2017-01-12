@@ -39,10 +39,10 @@ class HeadcountAnalyst
   end
 
   def get_district_data(d_1, d_2)
-    dist_object_1 = @district_repository.find_enrollment(d_1)
-    dist_object_2 = @district_repository.find_enrollment(d_2[:against])
-    @district_1 = dist_object_1.kindergarten_participation
-    @district_2 = dist_object_2.kindergarten_participation
+    @district_1 = @district_repository.find_enrollment(d_1)
+    .kindergarten_participation
+    @district_2 = @district_repository.find_enrollment(d_2[:against])
+    .kindergarten_participation
   end
 
   def find_the_average(district_values)
@@ -94,9 +94,9 @@ class HeadcountAnalyst
 
   def kindergarten_participation_correlates_with_high_school_graduation(name)
     if name.keys ==[:across]
-      name[:across].each do |district_name|
-        percentage = kindergarten_participation_against_high_school_graduation(district_name)
-        return false if percentage < 0.6 || percentage > 1.5
+      name[:across].each do |dn|
+        p = kindergarten_participation_against_high_school_graduation(dn)
+        return false if p < 0.6 || p > 1.5
       end
       true
     else
