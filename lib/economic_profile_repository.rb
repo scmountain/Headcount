@@ -20,81 +20,63 @@ class EconomicProfileRepository
         contents.each do |row|
       make_economic_profile(row, symbol)
     end
-    require "pry"; binding.pry
   end
 end
 
   def make_economic_profile(row, symbol)
     if symbol == :median_household_income
-      year = year_formatting(row, symbol)
-      data = row[:data].to_i
-      name = row[:location]
-      if @economic_profiles[name] != 0
-        @economic_profiles[name].median_household_income[year] = data
-      else
-        ep = EconomicProfile.new({name: name, median_household_income: {year => data}})
-        @economic_profiles[name] = ep
-      end
-    # elsif symbol == :children_in_poverty ||
-    #
-    #   symbol == :title_i
+      median_household_income_cruncher(row, symbol)
+    elsif symbol == :children_in_poverty
+      children_in_poverty_cruncher(row, symbol)
+    elsif symbol == :free_or_reduced_price_lunch
+      reduced_price_lunch_crunhcer(row, symbol)
+    else
+      symbol == :title_i
       # poverty_data(load_data(file), economic_type)
       # reduced_lunch_data(load_data(file), economic_type)
     end
   end
 
+  def median_household_income_cruncher(row, symbol)
+    year = year_formatting(row, symbol)
+    data = row[:data].to_i
+    name = row[:location]
+    if @economic_profiles[name] != 0
+      @economic_profiles[name].median_household_income[year] = data
+    else
+      ep = EconomicProfile.new({name: name, median_household_income: {year => data}})
+      @economic_profiles[name] = ep
+    end
+  end
+
+  def children_in_poverty_cruncher(row, symbol)
+    year = row[:timeframe].to_i
+    data = row[:data].to_f
+    name = row[:location]
+    if @economic_profiles[name].children_in_poverty == nil
+      @economic_profiles[name].children_in_poverty = {year => data}
+    else
+      @economic_profiles[name].children_in_poverty[year] = data
+    end
+  end
+
+  def reduced_price_lunch_crunhcer(row, symbol)
+    poverty_check = row[:poverty_level]
+    if poverty_check == "Eligible for Free or Reduced Lunch"
+      year = row[:timeframe].to_i
+      data = row[:data].to_f
+      name = row[:location]
+      percentage = row[:dataformat].to_sym
+        if @economic_profiles[name].free_or_reduced_price_lunch == nil
+          @economic_profiles[name].free_or_reduced_price_lunch = {year {{percent=> data}}
+        else
+          @economic_profiles[name].free_or_reduced_price_lunch[year] = data
+      end
+    end
+  end
+
   def year_formatting(row, symbol)
     row[:timeframe].split("-").map {|a| a.to_i}
-  end
-
-  def income_data(economic_data, economic_type)
-    economic_data.each do |row|
-      district_name = row[:location]
-      income        = row[:data].to_i
-      years = row[:timeframe].split("-").map{ |num| num.to_i }
-      row_data = { :name => district_name, economic_type =>
-                    {years => income }}
-        if !@economic_profiles[district_name]
-          @economic_profiles[district_name] = EconomicProfile.new(row_data)
-        else
-          @economic_profiles[district_name].add_new_data(row_data)
-        end
-    end
-  end
-
-  def poverty_data(economic_data, economic_type)
-    economic_data.each do |row|
-      if row[:dataformat] == "Percent"
-      district_name = row[:location]
-      rate          = determine_rate(row)
-      year          = row[:timeframe].to_i
-      row_data      = { :name => district_name,
-                        economic_type => {year => rate }}
-        if !@economic_profiles[district_name]
-          @economic_profiles[district_name] = EconomicProfile.new(row_data)
-        else
-          @economic_profiles[district_name].add_new_data(row_data)
-        end
-      end
-    end
-  end
-
-  def reduced_lunch_data(economic_data, economic_type)
-    economic_data.each do |row|
-      if row[:poverty_level] == "Eligible for Free or Reduced Lunch"
-      district_name = upcase_name(row[:location])
-      year = row[:timeframe].to_i
-      rate          = determine_rate(row)
-      data_type = determine_data_type(row)
-      row_data = { :name => district_name,
-                    economic_type => {year => {data_type => rate } } }
-        if !@economic_profiles[district_name]
-          @economic_profiles[district_name] = EconomicProfile.new(row_data)
-        else
-          @economic_profiles[district_name].add_new_data(row_data)
-        end
-      end
-    end
   end
 
   def determine_data_type(row)

@@ -25,8 +25,8 @@ class EconomicProgileRepositoryTest < MiniTest::Test
     epr = EconomicProfileRepository.new
     epr.load_data(data)
     ep = epr.find_by_name("ACADEMY 20")
-    # assert_instance_of EconomicProfile, ep
-    # assert_equal "ACADEMY 20", ep.name
+    assert_instance_of EconomicProfile, ep
+    assert_equal "ACADEMY 20", ep.name
   end
 
   def test
