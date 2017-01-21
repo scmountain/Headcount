@@ -1,4 +1,5 @@
 require_relative "errors"
+
 class StatewideTest
   attr_reader :name, :grade_year_subject, :race_year_subject, :error, :error2
 
