@@ -1,14 +1,12 @@
-require_relative "../../headcount-master/lib/district"
-require_relative "../../headcount-master/lib/district_repository"
-require_relative "../../headcount-master/lib/enrollment"
-require_relative "../../headcount-master/lib/enrollment_repository"
-require_relative "../../headcount-master/lib/file_import"
-require_relative "../../headcount-master/lib/clean_data"
+require_relative "district"
+require_relative "district_repository"
+require_relative "enrollment"
+require_relative "enrollment_repository"
+require_relative "file_import"
+require_relative "clean_data"
 
 class HeadcountAnalyst
-  attr_accessor :district_1,
-                :district_2,
-                :district_repository,
+  attr_reader   :district_repository,
                 :multiple_districts_averages,
                 :state_name
 
@@ -18,31 +16,31 @@ class HeadcountAnalyst
     @multiple_districts_averages = []
   end
 
+  def get_district_data(d_1, d_2)
+    @dist1 = @district_repository.find_enrollment(d_1)
+    .kindergarten_participation
+    @dist2 = @district_repository.find_enrollment(d_2[:against])
+    .kindergarten_participation
+  end
+
   def kindergarten_participation_rate_variation(d_1, d_2)
     get_district_data(d_1, d_2)
-    dist_1_avg = find_the_average(@district_1.values)
-    dist_2_avg = find_the_average(@district_2.values)
+    dist_1_avg = find_the_average(@dist1.values)
+    dist_2_avg = find_the_average(@dist2.values)
     find_the_variance(dist_1_avg,dist_2_avg)
   end
 
   def kindergarten_participation_rate_variation_trend(d_1, d_2)
     get_district_data(d_1, d_2)
     year_hash = {}
-    years = @district_1.keys
+    years = @dist1.keys
     years.each do |year|
-      if @district_2[year] > 0
-        variance = find_the_variance(@district_1[year], @district_2[year])
+      if @dist2[year] > 0
+        variance = find_the_variance(@dist1[year], @dist2[year])
         year_hash[year] = variance
       end
     end
     year_hash
-  end
-
-  def get_district_data(d_1, d_2)
-    @district_1 = @district_repository.find_enrollment(d_1)
-    .kindergarten_participation
-    @district_2 = @district_repository.find_enrollment(d_2[:against])
-    .kindergarten_participation
   end
 
   def find_the_average(district_values)

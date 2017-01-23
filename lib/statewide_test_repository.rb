@@ -1,7 +1,8 @@
 require 'csv'
-require './lib/statewide_test'
-require './lib/file_import'
-require './lib/clean_data'
+require_relative "statewide_test"
+require_relative "file_import"
+require_relative "clean_data"
+
 
 class StatewideTestRepository
 

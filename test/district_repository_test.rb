@@ -1,23 +1,23 @@
 require './test/test_helper'
-require_relative "../../headcount-master/lib/district_repository"
-require_relative "../../headcount-master/lib/district"
-require_relative "../../headcount-master/lib/enrollment"
-require_relative "../../headcount-master/lib/enrollment_repository"
+require_relative "../../headcount/lib/district_repository"
+require_relative "../../headcount/lib/district"
+require_relative "../../headcount/lib/enrollment"
+require_relative "../../headcount/lib/enrollment_repository"
 
 class TestDistrictRepository < MiniTest::Test
   def test_loading_and_finding_districts
-    dr = DistrictRepository.new
-    dr.load_data({
-                   :enrollment => {
-                     :kindergarten_participation => "./data/Kindergartners in full-day program.csv"
-                   }
-                 })
-    district = dr.find_by_name("ACADEMY 20")
+      dr = DistrictRepository.new
+      dr.load_data({
+                     :enrollment => {
+                       :kindergarten => "./data/Kindergartners in full-day program.csv"
+                     }
+                   })
+      district = dr.find_by_name("ACADEMY 20")
 
-    assert_equal "ACADEMY 20", district.name
+      assert_equal "ACADEMY 20", district.name
 
-    assert_equal 7, dr.find_all_matching("WE").count
-  end
+      assert_equal 7, dr.find_all_matching("WE").count
+    end
 
   def test_district_enrollment_relationship_basics
     dr = DistrictRepository.new
@@ -30,7 +30,7 @@ class TestDistrictRepository < MiniTest::Test
     dr = DistrictRepository.new
     dr.load_data({
                    :enrollment => {
-                     :kindergarten_participation => "./data/Kindergartners in full-day program.csv"
+                     :kindergarten => "./data/Kindergartners in full-day program.csv"
                    }
                  })
     district = dr.find_by_name("ACADEMY 20")

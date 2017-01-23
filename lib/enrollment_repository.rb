@@ -1,10 +1,10 @@
 require "csv"
 
-require_relative "../../headcount-master/lib/district"
-require_relative "../../headcount-master/lib/enrollment"
-require_relative "../../headcount-master/lib/district_repository"
-require_relative "../../headcount-master/lib/file_import"
-require_relative "../../headcount-master/lib/clean_data"
+require_relative "district"
+require_relative "enrollment"
+require_relative "district_repository"
+require_relative "file_import"
+require_relative "clean_data"
 
 
 class EnrollmentRepository
@@ -33,7 +33,7 @@ class EnrollmentRepository
   end
 
   def make_enrollment(name, year, data, key)
-    if key == :kindergarten_participation
+    if key == :kindergarten
       if @csv_data_clustered.has_key?(name)
         @csv_data_clustered[name].kindergarten_participation[year] = data
       else

@@ -1,4 +1,4 @@
-require_relative './file_import'
+require_relative 'file_import'
 
 
 module CleanData

@@ -1,8 +1,8 @@
 require './test/test_helper'
-require_relative "../../headcount-master/lib/district_repository"
-require_relative "../../headcount-master/lib/district"
-require_relative "../../headcount-master/lib/enrollment"
-require_relative "../../headcount-master/lib/enrollment_repository"
+require_relative "../../headcount/lib/district_repository"
+require_relative "../../headcount/lib/district"
+require_relative "../../headcount/lib/enrollment"
+require_relative "../../headcount/lib/enrollment_repository"
 
 class EnrollmentRepositoryTest < MiniTest::Test
 
