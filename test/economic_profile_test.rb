@@ -2,7 +2,7 @@ require "./test/test_helper"
 require_relative "../lib/economic_profile"
 
 class EconomicProfileTest < MiniTest::Test
-
+  def test
   def test_ep_key
     data = {:median_household_income => {[2005, 2009] => 50000, [2008, 2014] => 60000},
         :children_in_poverty => {2012 => 0.1845},
@@ -11,7 +11,6 @@ class EconomicProfileTest < MiniTest::Test
         :name => "ACADEMY 20"
        }
        economic_profile = EconomicProfile.new(data)
-
   end
 
 

@@ -30,10 +30,8 @@ end
       children_in_poverty_cruncher(row, symbol)
     elsif symbol == :free_or_reduced_price_lunch
       reduced_price_lunch_crunhcer(row, symbol)
-    else
-      symbol == :title_i
-      # poverty_data(load_data(file), economic_type)
-      # reduced_lunch_data(load_data(file), economic_type)
+    else symbol == :title_i
+      title_i_cruncher(row,symbol)
     end
   end
 
@@ -68,11 +66,20 @@ end
       name = row[:location]
       percentage = row[:dataformat].to_sym
         if @economic_profiles[name].free_or_reduced_price_lunch == nil
-          @economic_profiles[name].free_or_reduced_price_lunch = {year {{percent=> data}}
+          @economic_profiles[name].free_or_reduced_price_lunch
         else
           @economic_profiles[name].free_or_reduced_price_lunch[year] = data
       end
     end
+  end
+
+  def title_i_cruncher(row,symbol)
+    year = row[:timeframe].to_i
+    data = row[:data].to_f
+    if @economic_profiles[name].title_i == nil
+      @economic_profiles[name].title_i
+    else
+      @economic_profiles[name].title_i[year] = data
   end
 
   def year_formatting(row, symbol)
