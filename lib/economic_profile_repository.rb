@@ -82,7 +82,6 @@ end
     else
       @economic_profiles[name].title_i[year] = data
     end
-    require "pry"; binding.pry
   end
 
   def year_formatting(row, symbol)
