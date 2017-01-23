@@ -76,10 +76,13 @@ end
   def title_i_cruncher(row,symbol)
     year = row[:timeframe].to_i
     data = row[:data].to_f
+    name = row[:location]
     if @economic_profiles[name].title_i == nil
       @economic_profiles[name].title_i
     else
       @economic_profiles[name].title_i[year] = data
+    end
+    require "pry"; binding.pry
   end
 
   def year_formatting(row, symbol)

@@ -28,9 +28,7 @@ class EconomicProfile
   end
 
   def median_household_income_average
-    result = @median_household_income.values.map do |value|
-      value
-    end
+    result = @median_household_income.values.map { |value| value }
     numerator = result.compact.reduce(:+)
     result_length = result.compact.count
     numerator / result_length
